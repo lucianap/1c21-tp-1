@@ -1,0 +1,96 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 2,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Graphite",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "config": {
+          "displayModeBar": false
+        },
+        "data": [
+          {
+            "line": {
+              "color": "red",
+              "width": 2
+            },
+            "mode": "lines",
+            "type": "scatter"
+          }
+        ],
+        "layout": {
+          "font": {
+            "color": "darkgrey"
+          },
+          "margin": {
+            "b": 20,
+            "t": 30
+          },
+          "paper_bgcolor": "rgba(0,0,0,0)",
+          "plot_bgcolor": "rgba(0,0,0,0)",
+          "xaxis": {
+            "type": "date"
+          }
+        },
+        "onclick": "console.log(data)\nwindow.updateVariables({query:{'var-project':'test'}, partial: true})",
+        "script": "console.log(data)\nvar trace = {\n  time: data.series[0].fields[0].values.buffer,\n  reqTime: data.series[0].fields[1].values.buffer\n};\nconsole.log(trace.time.length)\n\nlet xOriginalPositions = []\nlet yOriginalPositions = []\n\nlet xNew = []\nlet yNew = []\n\nfor (i = 0; i < trace.time.length; i++){\n    let time = 1\n    let value = trace.reqTime[i]\n\n    let randy = (trace.time * 100) % 2\n    console.log(randy)\n\n    if(randy == 1){\n\n        xOriginalPositions.push(time)\n        yOriginalPositions.push(value)\n\n    } else {\n\n        xNew.push(time)\n        yNew.push(value)\n\n    }\n\n    \n}\n\nlet traceOriginalPosition = {\n    y: yOriginalPositions,\n    x: xOriginalPositions,\n    type: 'box',\n    boxpoints: false,\n    name: \"Original positions\"\n}\n\nlet traceNew = {\n    y: yNew,\n    x: xNew,\n    type: 'box',\n    boxpoints: false,\n    name: \"Latest\"\n}\n\nvar layout = {\n    yaxis: {\n        automargin: true,\n        title: {\n            text: 'Test box plots',\n            standoff: 20\n        },\n        zeroline: false\n    },\n    boxmode: 'group',\n    xaxis: {\n        automargin: true,\n        title: {\n            text: \"Time\",\n            standoff: 20\n        },\n        type: 'category'\n    }\n}  \n\nreturn {data:[traceOriginalPosition, traceNew],layout:layout};"
+      },
+      "pluginVersion": "7.3.10",
+      "targets": [
+        {
+          "refId": "A",
+          "target": "stats.gauges.artillery-node.scenarioDuration.median"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Test",
+      "type": "ae3e-plotly-panel"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 26,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2021-05-08T03:22:59.456Z",
+    "to": "2021-05-08T03:31:12.761Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Test",
+  "uid": "Ofb3UICGz",
+  "version": 10
+}
