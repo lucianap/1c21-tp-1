@@ -1,6 +1,9 @@
 version: '2'
 
 services:
+    node:
+        build: app/
+        
     nginx:
         image: nginx:1.19.8
         ports:
@@ -25,6 +28,8 @@ services:
         image: grafana/grafana:7.3.10
         ports:
             - "80:3000"
+        environment:
+            - GF_INSTALL_PLUGINS=ae3e-plotly-panel
         volumes:
             - "grafana_config:/var/lib/grafana"
 
