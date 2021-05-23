@@ -21,8 +21,7 @@ config:
     
 
 scenarios:
-  - name: Root (/)
+  - name: Heavy (/)
     flow:
-      - log: "New node running"
       - get:
-          url: '/node'
+          url: '/heavy'

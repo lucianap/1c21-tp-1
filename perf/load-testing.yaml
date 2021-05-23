@@ -1,0 +1,36 @@
+config:
+  environments:
+    node:
+      target: 'http://localhost:5555'
+      plugins:
+        statsd:
+          host: localhost
+          port: 8125
+          prefix: "artillery-node"
+
+  pool: 50 # All HTTP requests from all virtual users will be sent over the same connections
+
+  phases:
+    # Ramp-up phase from 10 new VUs per second to 300 per second for 60 seconds
+    - name: FirstRampUp
+      duration: 60
+      arrivalRate: 10
+      rampTo: 300
+    - name: Constant
+      duration: 30
+      arrivalRate: 300
+    # Arrival of 300 New VUs per second for 60 seconds
+    - name: SecondRampUp
+      duration: 120
+      arrivalRate: 300
+      rampTo: 1500
+
+scenarios:
+  - name: bbox1 (/)
+    flow:
+      - get:
+          url: '/bbox1'
+  # - name: bbox2 (/)
+  #   flow:
+  #     - get:
+  #         url: '/bbox2'
