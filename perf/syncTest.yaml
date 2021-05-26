@@ -1,0 +1,39 @@
+config:
+  http:
+    # Responses have to be sent within 10 seconds, or an `ETIMEDOUT` error gets raised.
+    timeout: 1000
+  environments:
+    node:
+      target: 'http://localhost:5555'
+      plugins:
+        statsd:
+          host: localhost
+          port: 8125
+          prefix: "artillery-node"
+
+  pool: 50 # All HTTP requests from all virtual users will be sent over the same connections
+
+  phases:
+    # Arrival of 10 New VUs per second for 60 seconds
+    - name: WarmUp
+      duration: 60
+      arrivalRate: 5
+    # Ramp-up phase from 10 new VUs per second to 300 per second for 60 seconds
+    - name: RampUp
+      duration: 60
+      arrivalRate: 1
+      rampTo: 10
+    # Arrival of 300 New VUs per second for 60 seconds
+    - name: MaximumLoad
+      duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - name: bbox1 (/)
+    flow:
+      - get:
+          url: '/bbox1'
+#   - name: bbox2 (/)
+#     flow:
+#       - get:
+#           url: '/bbox2'
