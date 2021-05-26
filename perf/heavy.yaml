@@ -7,21 +7,27 @@ config:
           host: localhost
           port: 8125
           prefix: "artillery-node"
+      http:
+        timeout: 1024
+
 
   pool: 50 # All HTTP requests from all virtual users will be sent over the same connections
 
   phases:
+    - name: Clean
+      duration: 60
+      arrivalRate: 0
     - name: Ramp
       duration: 30
       arrivalRate: 5
-      rampTo: 30
+      rampTo: 60
     - name: Plain
-      duration: 120
-      arrivalRate: 30
+      duration: 60
+      arrivalRate: 60
     
 
 scenarios:
-  - name: Heavy (/)
+  - name: bbox2 (/)
     flow:
       - get:
-          url: '/heavy'
+          url: '/bbox2'

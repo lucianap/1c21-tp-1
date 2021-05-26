@@ -266,3 +266,18 @@ docc exec SERVICE COMMAND
 # Versión instalada
 docc version
 ```
+## Cheatsheet 8Fuentes
+
+### Multiples containers
+- Modificamos el archivo nginx_reverse_proxy.conf para que tenga esto:
+```
+upstream backend {
+   server 1c21-tp-1_node_1:3000;
+   server 1c21-tp-1_node_2:3000;
+   server 1c21-tp-1_node_3:3000;
+}
+```
+
+- Por defecto nginx los corre en RoundRobin pero eso es modificable!
+- Corremos docker-compose escalando el container deseado, la cantidad de veces deseada:
+```$ docc up --scale node=3 -d```
